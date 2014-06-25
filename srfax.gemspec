@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jon@workmein.com"]
   spec.summary       = %q{wrapper for the SRFax API}
   spec.description   = %q{Uses HTTMultiParty for interfacing with HelloFax to send and receive faxes, and more.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Preferral/SRFax"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
