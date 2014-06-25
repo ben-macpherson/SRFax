@@ -18,6 +18,10 @@ Or install it yourself as:
 
 ## Usage
 
+### End Point
+
+POSTS are sent to the following URL: `https://www.srfax.com/SRF_SecWebSvc.php`
+
 TODO: Write usage instructions here
 
 ## Contributing
