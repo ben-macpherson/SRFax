@@ -1,4 +1,5 @@
 require "srfax/version"
+require "srfax/number_scrubber"
 require "httmultiparty"
 
 module Srfax
@@ -7,13 +8,15 @@ module Srfax
     include HTTMultiParty
 
     base_uri 'https://www.srfax.com'
-    headers 'User-Agent' => "hello_fax gem #{VERSION}"
+    headers 'User-Agent' => "srfax gem #{VERSION}"
 
     API_ENDPOINT = '/SRF_SecWebSvc.php'
 
     attr_accessor :guid
 
-    def initialize(access_id, password)
+    def initialize(access_id, password, sender_number = '6159881522')
+      @scrubber = Srfax::NumberScrubber.new
+      @sender_fax_number = @scrubber.scrub(sender_number)
       @access_id = access_id
       @access_pwd = password
       @sender_fax_number = '6159881522'
@@ -31,6 +34,8 @@ module Srfax
     #   "Result": Queued Fax ID (FaxDetailsID) or Reason for failure
     # }
     def send_fax(to, file)
+      to = @scrubber.scrub(to)
+
       @response = self.class.post(
         API_ENDPOINT,
         query: {
@@ -44,7 +49,7 @@ module Srfax
           sResponseFormat:  'JSON',
           sRetries:         3,
           sFileName_1:      'test_fax_doc.pdf',
-          sFileContent_1:   Base64.encode64(file.read)
+          sFileContent_1:   'file_content'#Base64.encode64(file.read)
         })
       @response
     end
