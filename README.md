@@ -1,6 +1,6 @@
 # Srfax
 
-TODO: Write a gem description
+Gem to send faxes using the SRFax API
 
 ## Installation
 
@@ -17,6 +17,9 @@ Or install it yourself as:
     $ gem install srfax
 
 ## Usage
+
+faxer = Srfax.new(access_id, password, sending_fax_number, sender_email)
+faxer.send_fax(recipient_fax_number, file_object)
 
 ### End Point
 
