@@ -31,10 +31,16 @@ module Srfax
     #   "Status": either "Success" or "Failed",
     #   "Result": Queued Fax ID (FaxDetailsID) or Reason for failure
     # }
-    def send_fax(to, file, options={})
-      @response = self.class.post(
-        API_ENDPOINT,
-        query: {
+    def send_fax(to, files, options={})
+      if to.is_a? Array
+        if to.length > 50
+          raise "Too Many Recipient Numbers"
+        end
+        to = to.join("|")
+        options[:fax_type] = 'BROADCAST'
+      end
+
+      query = {
           action:           'Queue_Fax',
           access_id:        @access_id,
           access_pwd:       @access_pwd,
@@ -42,11 +48,18 @@ module Srfax
           sSenderEmail:     @sender_email,
           sFaxType:         options.fetch(:fax_type, 'SINGLE'),
           sToFaxNumber:     to,
-          sResponseFormat:  'JSON',
-          sRetries:         options.fetch(:retries, 3),
-          sFileName_1:      file,
-          sFileContent_1:   Base64.encode64(file.read)
-        })
+          sResponseFormat:  options.fetch(:response_format, 'JSON'),
+          sRetries:         options.fetch(:retries, 3)
+      }
+
+      files.each_with_index do |file, index|
+        query["sFileName_#{index}"]    => file
+        query["sFileContent_#{index}"] => Base64.encode64(file.read)
+      end
+
+      @response = self.class.post(
+        API_ENDPOINT,
+        query: query)
       @response
     end
 
