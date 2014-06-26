@@ -25,7 +25,9 @@ faxer.send_fax(recipient_fax_number, file_object)
 
 POSTS are sent to the following URL: `https://www.srfax.com/SRF_SecWebSvc.php`
 
-TODO: Write usage instructions here
+TODO:
+ * Support Cover Pages
+ * Support HTTP callback
 
 ## Contributing
 
