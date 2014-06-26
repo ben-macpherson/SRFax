@@ -13,24 +13,25 @@ module Srfax
 
     attr_accessor :guid
 
-    def initialize(access_id, password)
+    def initialize(access_id, password, fax_number, email)
       @access_id = access_id
       @access_pwd = password
-      @sender_fax_number = '6159881522'
-      @sender_email = 'jon@workmein.com'
+      @sender_fax_number = fax_number
+      @sender_email = email
     end
 
     # Queues a fax for sending
     # params:
     #   to => 10 digit recipient fax number
     #   file => File.open('filename.pdf')
+    #   options => Optional hash - fax_type (SINGLE (default)/BROADCAST), retries (default: 3)
     #
     # Expected response:
     # {
     #   "Status": either "Success" or "Failed",
     #   "Result": Queued Fax ID (FaxDetailsID) or Reason for failure
     # }
-    def send_fax(to, file)
+    def send_fax(to, file, options={})
       @response = self.class.post(
         API_ENDPOINT,
         query: {
@@ -39,11 +40,11 @@ module Srfax
           access_pwd:       @access_pwd,
           sCallerID:        @sender_fax_number,
           sSenderEmail:     @sender_email,
-          sFaxType:         'SINGLE', # TODO: make this "SINGLE" or "BROADCAST" optionally
-          sToFaxNumber:     '16155159891',#to,
+          sFaxType:         options.fetch(:fax_type, 'SINGLE'),
+          sToFaxNumber:     to,
           sResponseFormat:  'JSON',
-          sRetries:         3,
-          sFileName_1:      'test_fax_doc.pdf',
+          sRetries:         options.fetch(:retries, 3),
+          sFileName_1:      file,
           sFileContent_1:   Base64.encode64(file.read)
         })
       @response
