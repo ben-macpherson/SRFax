@@ -14,43 +14,54 @@ module Srfax
 
     attr_accessor :guid
 
-    def initialize(access_id, password, sender_number = '6159881522')
+    def initialize(access_id, password, email, sender_number = '6159881522')
       @scrubber = Srfax::NumberScrubber.new
       @sender_fax_number = @scrubber.scrub(sender_number)
       @access_id = access_id
       @access_pwd = password
-      @sender_fax_number = '6159881522'
-      @sender_email = 'jon@workmein.com'
+      @sender_email = email
     end
 
     # Queues a fax for sending
     # params:
     #   to => 10 digit recipient fax number
     #   file => File.open('filename.pdf')
+    #   options => Optional hash - fax_type (SINGLE (default)/BROADCAST), retries (default: 3)
     #
     # Expected response:
     # {
     #   "Status": either "Success" or "Failed",
     #   "Result": Queued Fax ID (FaxDetailsID) or Reason for failure
     # }
-    def send_fax(to, file)
-      to = @scrubber.scrub(to)
+    def send_fax(to, files, options={})
+      if to.is_a? Array
+        if to.length > 50
+          raise "Too Many Recipient Numbers"
+        end
+        to = to.map {|num| @scrubber.scrub(num) }.join("|")
+        options[:fax_type] = 'BROADCAST'
+      else
+        to = @scrubber.scrub(to)
+      end
 
-      @response = self.class.post(
-        API_ENDPOINT,
-        query: {
+      query = {
           action:           'Queue_Fax',
           access_id:        @access_id,
           access_pwd:       @access_pwd,
           sCallerID:        @sender_fax_number,
           sSenderEmail:     @sender_email,
-          sFaxType:         'SINGLE', # TODO: make this "SINGLE" or "BROADCAST" optionally
-          sToFaxNumber:     '16155159891',#to,
-          sResponseFormat:  'JSON',
-          sRetries:         3,
-          sFileName_1:      'test_fax_doc.pdf',
-          sFileContent_1:   'file_content'#Base64.encode64(file.read)
-        })
+          sFaxType:         options.fetch(:fax_type, 'SINGLE'),
+          sToFaxNumber:     to,
+          sResponseFormat:  options.fetch(:response_format, 'JSON'),
+          sRetries:         options.fetch(:retries, 3)
+      }
+
+      files.each_with_index do |file, index|
+        query["sFileName_#{index}"]    => file
+        query["sFileContent_#{index}"] => Base64.encode64(file.read)
+      end
+
+      @response = self.class.post(API_ENDPOINT, query: query)
       @response
     end
 
