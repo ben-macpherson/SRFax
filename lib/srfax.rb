@@ -33,7 +33,10 @@ module Srfax
     #   "Status": either "Success" or "Failed",
     #   "Result": Queued Fax ID (FaxDetailsID) or Reason for failure
     # }
-    def send_fax(to, files, options={})
+    def send_fax(to, options, *files)
+      options ||= {}
+      print files
+      print ""
       if to.is_a? Array
         if to.length > 50
           raise "Too Many Recipient Numbers"
@@ -57,7 +60,7 @@ module Srfax
       }
 
       files.each_with_index do |file, index|
-        query["sFileName_#{index}"]    = file
+        query["sFileName_#{index}"]    = "yo yo yo"
         query["sFileContent_#{index}"] = Base64.encode64(file.read)
       end
 
