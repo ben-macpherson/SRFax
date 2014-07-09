@@ -61,7 +61,7 @@ module Srfax
           sRetries:         options.fetch(:retries, 3)
       }
 
-      files.each_with_index do |file, index|
+      [files].flatten.each_with_index do |file, index|
         query["sFileName_#{index}"]    = "yo_yo_yo.pdf"
         query["sFileContent_#{index}"] = Base64.encode64(file.read)
       end
