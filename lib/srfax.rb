@@ -14,7 +14,7 @@ module Srfax
 
     attr_accessor :guid
 
-    def new(access_id, password, email, sender_number = '6159881522')
+    def initialize(access_id, password, email, sender_number = '6159881522')
       @scrubber = Srfax::NumberScrubber.new
       @sender_fax_number = @scrubber.scrub(sender_number)
       @access_id = access_id
