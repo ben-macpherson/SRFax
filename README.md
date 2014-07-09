@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-faxer = Srfax.new(access_id, password, sending_fax_number, sender_email)
+faxer = Srfax::API.new(access_id, password, sender_email, sending_fax_number)
 faxer.send_fax(recipient_fax_number, file_object)
 
 ### End Point

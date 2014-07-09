@@ -14,7 +14,7 @@ module Srfax
 
     attr_accessor :guid
 
-    def initialize(access_id, password, email, sender_number = '6159881522')
+    def new(access_id, password, email, sender_number = '6159881522')
       @scrubber = Srfax::NumberScrubber.new
       @sender_fax_number = @scrubber.scrub(sender_number)
       @access_id = access_id
@@ -57,8 +57,8 @@ module Srfax
       }
 
       files.each_with_index do |file, index|
-        query["sFileName_#{index}"]    => file
-        query["sFileContent_#{index}"] => Base64.encode64(file.read)
+        query["sFileName_#{index}"]    = file
+        query["sFileContent_#{index}"] = Base64.encode64(file.read)
       end
 
       @response = self.class.post(API_ENDPOINT, query: query)
