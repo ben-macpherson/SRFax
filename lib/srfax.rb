@@ -47,6 +47,8 @@ module Srfax
         to = @scrubber.scrub(to)
       end
 
+      puts to
+
       query = {
           action:           'Queue_Fax',
           access_id:        @access_id,
@@ -54,13 +56,13 @@ module Srfax
           sCallerID:        @sender_fax_number,
           sSenderEmail:     @sender_email,
           sFaxType:         options.fetch(:fax_type, 'SINGLE'),
-          sToFaxNumber:     to,
+          sToFaxNumber:     '16155159891',#to,
           sResponseFormat:  options.fetch(:response_format, 'JSON'),
           sRetries:         options.fetch(:retries, 3)
       }
 
       files.each_with_index do |file, index|
-        query["sFileName_#{index}"]    = "yo yo yo"
+        query["sFileName_#{index}"]    = "yo_yo_yo.pdf"
         query["sFileContent_#{index}"] = Base64.encode64(file.read)
       end
 
