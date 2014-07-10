@@ -62,7 +62,7 @@ module Srfax
       }
 
       [files].flatten.each_with_index do |file, index|
-        query["sFileName_#{index}"]    = "yo_yo_yo.pdf"
+        query["sFileName_#{index}"]    = "file#{index}.#{options.fetch(:file_extension, 'pdf')}"
         query["sFileContent_#{index}"] = Base64.encode64(file.read)
       end
 
