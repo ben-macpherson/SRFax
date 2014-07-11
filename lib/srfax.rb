@@ -16,7 +16,7 @@ module Srfax
 
     def initialize(access_id, password, email, sender_number)
       @scrubber = Srfax::NumberScrubber.new
-      @sender_fax_number = @scrubber.scrub(sender_number)
+      @sender_fax_number = @scrubber.scrub(sender_number, false)
       @access_id = access_id
       @access_pwd = password
       @sender_email = email

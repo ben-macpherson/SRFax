@@ -3,11 +3,10 @@ require "srfax/version"
 module Srfax
 	class NumberScrubber
 
-		def scrub(number)
+		def scrub(number, check_for_length=true)
 			@number = (number.class == String ? number : number.to_s)
 			remove_non_numerals
-			remove_leading_one
-			check_for_valid_length
+			check_for_valid_length if check_for_length
 			@number
 		end
 
@@ -17,16 +16,8 @@ module Srfax
 			@number.gsub!(/[^0-9]/,'')
 		end
 
-		def remove_leading_one
-			if @number[0] == '1'
-				@number = @number.slice(1..-1)
-			elsif @number[0..1] == '+1'
-				@number = @number.slice(2..-1)
-			end
-		end
-
 		def check_for_valid_length
-			if @number.length != 10
+			if @number.length < 11
 				raise "Invalid Fax Number #{@number}"
 			end
 		end
