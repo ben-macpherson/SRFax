@@ -18,9 +18,8 @@ Or install it yourself as:
     $ gem install srfax
 
 ## Usage
-
-faxer = Srfax::API.new(access_id, password, sender_email, sending_fax_number)
-faxer.send_fax(recipient_fax_number, file_object)
+faxer = Srfax::API.new(access_id, password, sender_email, sender_number)
+faxer.send_fax(recipient_fax_number_or_array_of_numbers, options_hash, array_of_file_objects)
 
 ### End Point
 

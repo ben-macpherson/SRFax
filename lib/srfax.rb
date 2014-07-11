@@ -14,7 +14,7 @@ module Srfax
 
     attr_accessor :guid
 
-    def initialize(access_id, password, email, sender_number = '6159881522')
+    def initialize(access_id, password, email, sender_number)
       @scrubber = Srfax::NumberScrubber.new
       @sender_fax_number = @scrubber.scrub(sender_number)
       @access_id = access_id
@@ -25,8 +25,8 @@ module Srfax
     # Queues a fax for sending
     # params:
     #   to => 10 digit recipient fax number
-    #   file => File.open('filename.pdf')
     #   options => Optional hash - fax_type (SINGLE (default)/BROADCAST), retries (default: 3)
+    #   file => File.open('filename.pdf')
     #
     # Expected response:
     # {
@@ -47,8 +47,6 @@ module Srfax
         to = @scrubber.scrub(to)
       end
 
-      puts to
-
       query = {
           action:           'Queue_Fax',
           access_id:        @access_id,
@@ -56,7 +54,7 @@ module Srfax
           sCallerID:        @sender_fax_number,
           sSenderEmail:     @sender_email,
           sFaxType:         options.fetch(:fax_type, 'SINGLE'),
-          sToFaxNumber:     '16155159891',#to,
+          sToFaxNumber:     to,
           sResponseFormat:  options.fetch(:response_format, 'JSON'),
           sRetries:         options.fetch(:retries, 3)
       }
