@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/preferral/srfax.png?label=ready&title=Ready)](https://waffle.io/preferral/srfax)
 # Srfax
 
 Gem to send faxes using the SRFax API
