@@ -18,8 +18,18 @@ Or install it yourself as:
     $ gem install srfax
 
 ## Usage
-faxer = Srfax::API.new(access_id, password, sender_email, sender_number)
-faxer.send_fax(recipient_fax_number_or_array_of_numbers, options_hash, array_of_file_objects)
+    faxer = Srfax::API.new(access_id, password, sender_email, sender_number)
+    faxer.send_fax(recipient_fax_number_or_array_of_numbers, options_hash, array_of_file_objects)
+
+## Tips
+File objects are expected in the following format:
+    File.open('/Users/Geekoncoffee/Desktop/file.pdf')
+
+Example from Prawn:
+    tmp_file = Tempfile.new(Digest::MD5.hexdigest(rand(12).to_s))
+    pdf = Prawn::Document.new
+    pdf.text "Hello World"
+    pdf.render_file(tmp_file.path)
 
 ### End Point
 
