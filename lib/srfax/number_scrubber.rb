@@ -17,6 +17,10 @@ module Srfax
 		end
 
 		def check_for_valid_length
+			if @number.length == 10
+				@number = "1#{@number}"
+			end
+
 			if @number.length < 11
 				raise "Invalid Fax Number #{@number}"
 			end
