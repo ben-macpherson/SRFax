@@ -23,13 +23,19 @@ Or install it yourself as:
 
 ## Tips
 File objects are expected in the following format:
-    File.open('/Users/Geekoncoffee/Desktop/file.pdf')
+
+```ruby
+File.open('/Users/Geekoncoffee/Desktop/file.pdf')
+````
 
 Example from Prawn:
-    tmp_file = Tempfile.new(Digest::MD5.hexdigest(rand(12).to_s))
-    pdf = Prawn::Document.new
-    pdf.text "Hello World"
-    pdf.render_file(tmp_file.path)
+
+```ruby
+tmp_file = Tempfile.new(Digest::MD5.hexdigest(rand(12).to_s))
+pdf = Prawn::Document.new
+pdf.text "Hello World"
+pdf.render_file(tmp_file.path)
+```
 
 ### End Point
 
