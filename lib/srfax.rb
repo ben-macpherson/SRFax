@@ -35,8 +35,6 @@ module Srfax
     # }
     def send_fax(to, options, *files)
       options ||= {}
-      print files
-      print ""
       if to.is_a? Array
         if to.length > 50
           raise "Too Many Recipient Numbers"
