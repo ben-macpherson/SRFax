@@ -92,6 +92,20 @@ module Srfax
       @response
     end
 
+    def retrieve_fax(fax_id)
+      @response = self.class.post(
+        API_ENDPOINT,
+        query: {
+          action: "Retrieve_Fax",
+          access_id: @access_id,
+          access_pwd: @access_pwd,
+          sFaxDetailsID: fax_id,
+          sDirection: 'OUT',
+          sResponseFormat: 'JSON'
+        }
+      )
+    end
+
     def response
       @response
     end

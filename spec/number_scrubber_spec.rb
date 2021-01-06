@@ -26,9 +26,9 @@ describe Srfax::NumberScrubber do
     end
 
     describe ':scrub method' do
-      it 'should return a 10-digit number' do
+      it 'should return a 11-digit number' do
         @good_numbers.each do |number|
-          Srfax::NumberScrubber.new.scrub(number).length.should eql(10)
+          Srfax::NumberScrubber.new.scrub(number).length.should eql(11)
         end
       end
     end
